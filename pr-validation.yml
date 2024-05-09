@@ -44,7 +44,7 @@ stages:
         organization: 'rotimi-ajayi'
 
   - job: Test
-    dependsOn: Build  # Run tests after build completes
+    dependsOn: SecurityScan  # Run tests after build completes
     condition: succeeded()  # Only run tests if build succeeds
     pool:
       vmImage: ubuntu-latest  # Adjust based on your preference
