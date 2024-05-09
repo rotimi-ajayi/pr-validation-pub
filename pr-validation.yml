@@ -33,14 +33,15 @@ stages:
     pool:
       vmImage: ubuntu-latest  # Adjust based on your preference
     steps:
-    - task: NodeTool@0
+    - task: SnykSecurityScan@1
       inputs:
-        versionSpec: '20.13.0'  # Adjust based on your Next.js requirements
-      displayName: 'Install Node.js'
-    - script: npm install -g snyk  # Install Snyk globally
-      displayName: 'Install Snyk'
-    - script: snyk test --free  # Run Snyk test in free tier mode
-      displayName: 'Run Snyk security scan (Free Tier)'
+        serviceConnectionEndpoint: 'Snyk-Auth'
+        testType: 'app'
+        severityThreshold: 'medium'
+        monitorWhen: 'always'
+        failOnIssues: true
+        projectName: 'pr-validation-pub'
+        organization: 'rotimi-ajayi'
 
   - job: Test
     dependsOn: Build  # Run tests after build completes
@@ -54,7 +55,7 @@ stages:
       displayName: 'Install Node.js'
     - script: npm install  # Restore project dependencies
       displayName: 'Install dependencies'
-    - script: npm test  # Run Jest tests
+    - script: npm test -- --watchAll # Run Jest tests
       displayName: 'Run Jest tests'
       env:
         TEST_RESULTS_FILE: $(System.DefaultWorkingDirectory)/test-results.xml  # Optional: Define output file for test results
