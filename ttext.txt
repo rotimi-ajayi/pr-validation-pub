@@ -1,0 +1,32 @@
+# # Trigger the pipeline on pull requests to the main branch
+# pr:
+#   branches:
+#     include:
+#       - "*"
+
+# # Define the build agent pool
+# pool:
+#   vmImage: ubuntu-latest
+
+# # Build stage - checkout code and build the application
+# jobs:
+# - job: Build
+#   pool:
+#     vmImage: ubuntu-latest  # Replace with your OS requirement
+#   steps:
+#   - script: |
+#       git checkout .
+#       echo "** Installing dependencies... **"
+#       npm install
+#       echo "** Building the application... **"
+#       npm run build
+#   - publish: $(System.DefaultWorkingDirectory)/build  # Publish build artifacts
+
+# - job: TestBuild
+#   dependsOn: Build
+#   condition: succeeded()  # Only run if build succeeds
+#   steps:
+#   - script: |
+#       # Replace with your test command
+#       # Example: npm test
+#       echo "** Build successful... **"
